@@ -278,13 +278,13 @@ class Pagination extends React.Component {
   hasNext = () =>
     this.state.current < calculatePage(undefined, this.state, this.props);
 
- getShowSizeChanger() {
-   const { showSizeChanger, total, totalBoundaryShowSizeChanger } = this.props;
-   if (typeof showSizeChanger !== 'undefined') {
-     return showSizeChanger;
-   }
-   return total > totalBoundaryShowSizeChanger;
- }
+  getShowSizeChanger() {
+    const { showSizeChanger, total, totalBoundaryShowSizeChanger } = this.props;
+    if (typeof showSizeChanger !== 'undefined') {
+      return showSizeChanger;
+    }
+    return total > totalBoundaryShowSizeChanger;
+  }
 
   runIfEnter = (event, callback, ...restParams) => {
     if (event.key === 'Enter' || event.charCode === 13) {
@@ -353,6 +353,7 @@ class Pagination extends React.Component {
       selectComponentClass,
       selectPrefixCls,
       pageSizeOptions,
+      pageRightLeft,
     } = this.props;
 
     const { current, pageSize, currentInputValue } = this.state;
@@ -371,7 +372,14 @@ class Pagination extends React.Component {
     let gotoButton = null;
 
     const goButton = showQuickJumper && showQuickJumper.goButton;
-    const pageBufferSize = showLessItems ? 1 : 2;
+    let pageBufferSize;
+    if (pageRightLeft) {
+      pageBufferSize = pageRightLeft;
+    } else if (showLessItems) {
+      pageBufferSize = 1;
+    } else {
+      pageBufferSize = 2;
+    }
 
     const prevPage = current - 1 > 0 ? current - 1 : 0;
     const nextPage = current + 1 < allPages ? current + 1 : allPages;
